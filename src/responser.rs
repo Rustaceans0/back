@@ -2,9 +2,9 @@ use chatgpt_rs::prelude::*;
 use validator::Validate;
 #[derive(Debug, Deserialize, Validate, Serialize)]
 pub struct auth_data {
-    #[validate(length(min = 2, max = 8))]
+    #[validate(length(min = 8, max = 64))] // right now we don't know how to log in
     pub password: String,
-    #[validate(length(min = 3, max = 7))]
+    #[validate(length(min = 3, max = 16))]
     pub username: String,
 }
 
@@ -16,7 +16,7 @@ pub struct SomeResponse {
 pub async fn step_x(data: SomeData, client: &Client) -> actix_web::Result<SomeData> {
     data.validate().map_err(ErrorBadRequest)?;
     let mut res = client
-        .post("https://httpbin.org/post")
+        .post("")
         .send_json(&data)
         .await
         .map_err(actix_web::error::ErrorInternalServerError)?;
