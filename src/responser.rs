@@ -1,10 +1,23 @@
-use chatgpt_rs::prelude::*;
-use validator::Validate;
-#[derive(Debug, Deserialize, Validate, Serialize)]
+// use chatgpt_rs::prelude::*;
+use actix_identity::{Identity, IdentityMiddleware};
+use actix_session::{config::PersistentSession, storage::CookieSessionStore, SessionMiddleware};
+use actix_web::{
+    cookie::{time::Duration, Key},
+    error,
+    http::StatusCode,
+    middleware, web, App, HttpMessage as _, HttpRequest, HttpServer, Responder,
+    HttpResponse,
+};
+use actix_web::error::HttpError;
+use actix_files::Files;
+use actix_session::config;
+use serde::{Deserialize, Serialize};
+use validator::{Validate, ValidationError};
+#[derive(Debug, Deserialize, Serialize)]
 pub struct auth_data {
-    #[validate(length(min = 8, max = 64))] // right now we don't know how to log in
+    //#[validate(length(min = 8))] // right now we don't know how to log in
     pub password: String,
-    #[validate(length(min = 3, max = 16))]
+    // #[validate(length(min = 3))]
     pub username: String,
 }
 
@@ -45,9 +58,9 @@ pub async fn create_something(
         .content_type(ContentType::json())
         .body(serde_json::to_string(&d).unwrap()))
 }
-pub async fn get_letter(req: web::json::Json) -> Result<HttpResponse, Error> {
-    let cl = ChatGPT::new(key);
-    let response: CompletionResponse = cl.send_message(req.into_inner()).await?;
-
-    HttpResponse::Ok.json("{:?}", response)
-}
+// pub async fn get_letter(req: web::json::Json) -> Result<HttpResponse, Error> {
+//     let cl = ChatGPT::new(key);
+//     let response: CompletionResponse = cl.send_message(req.into_inner()).await?;
+//
+//     HttpResponse::Ok.json("{:?}", response)
+// }

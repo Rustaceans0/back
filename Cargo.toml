@@ -16,3 +16,5 @@ chatgpt_rs = "1.1.3"
 dotenv = "0.15.0"
 config = "0.13.3"
 diesel = { version = "2.0.4", features = ["postgres"] }
+serde = "1.0.160"
+validator = "0.16.0"
