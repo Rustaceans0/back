@@ -10,7 +10,7 @@ use actix_web::{
 use actix_web::error::HttpError;
 use actix_files::Files;
 use actix_session::config;
-
+// until request processing and configuration loading is used
 // use dotenv::dotenv;
 // use crate::config;
 const ONE_MINUTE: Duration = Duration::minutes(1);
@@ -48,7 +48,7 @@ async fn something() -> HttpResponse {
 // }
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // dotenv().ok();
+    // dotenv().ok();  - for load config from .env
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     let secret_key = Key::generate();
 
@@ -64,7 +64,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(
                 SessionMiddleware::builder(CookieSessionStore::default(), secret_key.clone())
                     .cookie_name("auth-example".to_owned())
-                    .cookie_secure(false)
+                    .cookie_secure(false) //until we think about security
                     .session_lifecycle(PersistentSession::default().session_ttl(ONE_MINUTE))
                     .build(),
             )
